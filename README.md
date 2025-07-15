@@ -1,7 +1,11 @@
 # The `linphon` Package
+<div align="center">
 Version 0.1.0
 
-Set phonological feature matrices, linear rewrite rules, and more.
+***Set phonological feature matrices, linear rewrite rules, and more.***
+
+<img src="reference/spe-1-stress-rule.png" />
+</div>
 
 ## Getting started
 
@@ -43,14 +47,14 @@ The above will produce the following output:
 
 The core functions of the `linphon` package are:
 
-- `linphon.fmat(..features: array)` to set block-style feature matrices. The
+- `linphon.fmat(..features: array | str)` to set block-style feature matrices. The
   passed arguments may be valued feature pairs (passed as an array
   `(value, feature)`, e.g. `("+", "syllabic)`), privative features (passed as a
   valueless array, e.g. `("nasal",)`), general categorial labels (passed as a
   string, e.g. `"V"`) as well as conditional sub-matrices which will be set
   in angled brackets within the feature matrix (passed as an array
   of arrays, e.g. `(("+", "back"), ("+", "round"))`).
-  - `linphon.fmat-inline(..features: array)` to set the feature matrix inline
+  - `linphon.fmat-inline(..features: array | str)` to set the feature matrix inline
     with the text.
 - `linphon.rule(input: content, output: content[, context: content])` to set
   phonological rules, with an optionally specified context/environment.

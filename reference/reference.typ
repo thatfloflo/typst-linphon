@@ -1,14 +1,46 @@
 #import "../src/lib.typ" as linphon
 
-#set page(margin: 1.5cm)
+#set page(margin: 1.5cm, numbering: "1")
+#set heading(numbering: "1.1")
+#show outline.entry: it => link(
+  it.element.location(),
+  it.indented(it.prefix(), [#it.body() #h(0.5em) _#it.page()_]),
+)
+#let extable = table.with(columns: (40%, 1fr), gutter: 1em, stroke: none, inset: 0.5em)
 
 #[
   #set align(center)
-  #set text(size: 2em, weight: 500)
-  The `linphon` Reference
+  #text(size: 2em, weight: 500)[The `linphon` Reference]
+  #v(1em, weak: true)
+  Version 0.1.0
 ]
 
-#let extable = table.with(columns: (40%, 1fr), gutter: 1em, stroke: none, inset: 0.5em)
+
+#outline(depth: 2)
+
+= Installation and import
+
+== Importing from Typst Universe
+The easiest way to use `linphon` is to just import it from the Typst Universe with
+```typ
+#import "@preview/linphon:0.1.0"
+```
+
+== Local installation
+To install `linphon` locally, download the latest version from
+#link("https://github.com/thatfloflo/typst-linphon/releases")[the `linphon` GitHub repository]
+and unpack it inside Typst's data dir, as follows:
+
+/ Linux: `$XDG_DATA_HOME/typst/packages/local/`
+/ MacOS: `~/Library/Application Support/typst/packages/local/`
+/ Windows: `%APPDATA%\typst\packages\local\`
+
+You can then import the local package with
+```typ
+#import "@local/linphon:0.1.0"
+```
+
+#pagebreak()
 
 = Feature matrices
 
@@ -108,6 +140,7 @@ You can pass an array of arrays to include a submatrix, which is set in angle br
   )
 ]
 
+#pagebreak()
 == Different types of feature values
 
 When given as feature values, the strings `"+"`, `"-"`, `"plus"`, `"minus"`, `"plus.minus"`, `"minus.plus"`, `"m"` _(marked)_, `"u"` _(unmarked)_, names of lower-case greek letters (`"alpha"`, `"beta"`, ..., `"omega"`, incl. `".alt"`-variants) and numerals will be set as though they had been written in math mode.
@@ -213,6 +246,7 @@ These can be specified in the same manner as the tabular feature matrices above,
 ]
 
 
+#pagebreak()
 = Cases / Option statements
 
 == Two-sided
@@ -269,50 +303,6 @@ These can be specified in the same manner as the tabular feature matrices above,
     Case 2
   ][...]
   X
-]
-
-== Custom brackets
-Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`, `"/"`, `"|"`, and `none`.
-#extable()[
-  ```typm
-  #linphon.cases(
-    delim: ("(", ")")
-  )[Case 1][Case 2][...]
-  ```
-][
-  #linphon.cases(
-    delim: ("(", ")")
-  )[Case 1][Case 2][...]
-][
-  ```typm
-  #linphon.cases(
-    delim: ("}", "{")
-  )[Case 1][Case 2][...]
-  ```
-][
-  #linphon.cases(
-    delim: ("}", "{")
-  )[Case 1][Case 2][...]
-][
-  ```typm
-  #linphon.cases(
-    delim: ("|", ">")
-  )[Case 1][Case 2][...]
-  ```
-][
-  #linphon.cases(
-    delim: ("/", "/")
-  )[Case 1][Case 2][...]
-][
-  ```typm
-  #linphon.cases(
-    delim: ("|", ">")
-  )[Case 1][Case 2][...]
-  ```
-][
-  #linphon.cases(
-    delim: ("|", "}")
-  )[Case 1][Case 2][...]
 ]
 
 = Rewrite rules
@@ -402,9 +392,89 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
   ]
 ]
 
+= Custom brackets
+It is possible to specify custom delimiters (brackets) for both feature matrices
+and case/option statements. The `linphon.fmat()` and `linphon.fmat-inline()`
+functions take both a `delim` and a `submatrix-delim` argument, while
+`linphon.cases()` takes only a `delim` argument.
+
+Possible `delim` values are always an array specifying a left and a right
+bracket as a pair, each of which can be one of:
+```typc "("```, ```typc ")"```, ```typc "{"```, ```typc "}"```, ```typc "["```,
+```typc "]"```, ```typc "<"```, ```typc ">"```, ```typc "/"```, ```typc "|"```,
+or to not set a bracket at all, ```typc none```.
+
+#extable()[
+  ```typm
+  #linphon.fmat(
+    delim: ("[", none),
+    submatrix-delim: ("(", "|"),
+    ("-", "syllabic"),
+    ("+", "nasal"),
+    ("-", "voice"),
+    (
+      ("alpha", "coronal"),
+      ("-alpha", "dorsal")
+    )
+  )
+  ```
+][
+  #linphon.fmat(
+    delim: ("[", none),
+    submatrix-delim: ("(", "|"),
+    ("-", "syllabic"),
+    ("+", "nasal"),
+    ("-", "voice"),
+    (
+      ("alpha", "coronal"),
+      ("-alpha", "dorsal")
+    )
+  )
+][
+  ```typm
+  #linphon.cases(
+    delim: ("(", ")")
+  )[Case 1][Case 2][...]
+  ```
+][
+  #linphon.cases(
+    delim: ("(", ")")
+  )[Case 1][Case 2][...]
+][
+  ```typm
+  #linphon.cases(
+    delim: ("}", "{")
+  )[Case 1][Case 2][...]
+  ```
+][
+  #linphon.cases(
+    delim: ("}", "{")
+  )[Case 1][Case 2][...]
+][
+  ```typm
+  #linphon.cases(
+    delim: ("/", "/")
+  )[Case 1][Case 2][...]
+  ```
+][
+  #linphon.cases(
+    delim: ("/", "/")
+  )[Case 1][Case 2][...]
+][
+  ```typm
+  #linphon.cases(
+    delim: ("|", ">")
+  )[Case 1][Case 2][...]
+  ```
+][
+  #linphon.cases(
+    delim: ("|", ">")
+  )[Case 1][Case 2][...]
+]
+
 = Examples of rules
 
-=== _l_-deletion
+== _l_-deletion
 
 #extable()[
   ```typm
@@ -420,7 +490,7 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
   #linphon.rule[l][#sym.emptyset][C #linphon.dash() \#]
 ]
 
-=== Tapping rule
+== Tapping rule
 
 #extable()[
   ```typm
@@ -466,7 +536,11 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
   ]
 ]
 
-=== SPE, Chapter 4, Rule 60 (p. 200)
+== SPE, Chapter 4, Rule 60 (p. 200)
+
+Note that this is not the best way to set the example numbers (60a,b), it would
+be much better instead to use a package such as
+#link("https://typst.app/universe/package/eggs")[`eggs`] for that.
 
 #extable()[
   ```typm
@@ -520,7 +594,11 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
   ]
 ]
 
-=== SPE, Chapter 3, Rule 82 (p. 99)
+== SPE, Chapter 3, Rule 82 (p. 99)
+
+Note that this is not the best way to set the example number (82), it would
+be much better instead to use a package such as
+#link("https://typst.app/universe/package/eggs")[`eggs`] for that.
 
 #extable()[
   ```typm
@@ -574,7 +652,9 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
     ]
     $"C"_0$#sym.angle.r
     \]#sub[
-      $angle.l "N" angle.l "A" angle.r angle.r$
+      $angle.l
+      "N" angle.l "A" angle.r
+      angle.r$
     ]
   ]
   ```
@@ -631,7 +711,9 @@ Possible `delim` values: `"("`, `")"`, `"{"`, `"}"`, `"["`, `"]"`, `"<"`, `">"`,
     ]
     $"C"_0$#sym.angle.r
     \]#sub[
-      $angle.l "N" angle.l "A" angle.r angle.r$
+      $angle.l
+      "N" angle.l "A" angle.r
+      angle.r$
     ]
   ]
   ]

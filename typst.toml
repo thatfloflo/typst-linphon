@@ -8,4 +8,5 @@ repository = "https://github.com/thatfloflo/typst-linphon"
 keywords = ["linguistics", "phonology", "rewrite rules"]
 categories = ["components", "text", "paper"]
 disciplines = ["linguistics"]
+exclude = ["reference/", "README.md"]
 compiler = "0.13.0"
